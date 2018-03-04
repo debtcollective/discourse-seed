@@ -36,9 +36,27 @@ jobs:
 
 workflows:
   version: 2
-  staging:
+  seed:
     jobs:
       - build
+      - hold:
+          type: approval
+          filters:
+            branches: 
+              only:
+                - development
+                - master
       - seed_staging:
           requires:
-            - build
+            - hold
+          filters:
+            branches:
+              only:
+                - development
+      - seed_production:
+          requires:
+            - hold
+          filters:
+            breanches:
+              only:
+                - master
