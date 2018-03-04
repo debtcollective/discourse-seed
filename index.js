@@ -38,7 +38,7 @@ async function main() {
       } else {
         return acc;
       }
-    });
+    }, []);
 
   await Promise.all([
     Promise.all(
