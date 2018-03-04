@@ -32,7 +32,7 @@ async function main() {
   const tagGroupsToUpdate = tagGroups
     .filter(({ name }) => !tagGroupsToCreate.find(tg => tg.name === name))
     .reduce((acc, tg) => {
-      const match = existingTagGroups.find(tg => tg.name === name);
+      const match = existingTagGroups.find(e => e.name === tg.name);
       if (tg.tag_names.every(n => match.tag_names.includes(n))) {
         return [...acc, Object.assign(tg, { id: match.id })];
       } else {
@@ -40,43 +40,37 @@ async function main() {
       }
     }, []);
 
-  await Promise.all([
-    Promise.all(
-      collectivesToCreate.map(async ({ collective }) => {
-        existingCollectives.push(await createCollective(collective));
-      }),
-    ),
-    Promise.all(
-      groupsToCreate.map(async group => {
-        existingGroups.push(await createGroup(group));
-      }),
-    ),
-    Promise.all(
-      tagGroupsToCreate.map(async tg => {
-        existingTagGroups.push(await createTagGroup(tg));
-      }),
-    ),
-    Promise.all(
-      tagGroupsToUpdate.map(async tg => {
-        const updated = await updateTagGroup(tg);
-        Object.assign(existingTagGroups.find(({ name }) => tg.name === name), tg);
-      }),
-    ),
-  ]);
+  for (const { collective } of collectivesToCreate) {
+    existingCollectives.push(await createCollective(collective));
+  }
 
-  const re = await Promise.all(
-    existingCollectives.map(async c => {
-      const { tag, description, collective: name } = colArr.find(({ collective }) => collective === c.name);
-      const full = `${tag}  \n\n${description}`;
-      const aboutTopic = await getCollectiveAboutTopic(c);
-      const idealTitle = `About the ${name}`;
-      if (aboutTopic.title !== idealTitle) {
-        await updateTopic(aboutTopic, idealTitle);
-      }
-      const topicPost = await getTopicFirstPost(aboutTopic);
-      return topicPost.raw !== full ? updatePost(topicPost.id, full) : Promise.resolve();
-    }),
-  );
+  for (const group of groupsToCreate) {
+    existingGroups.push(await createGroup(group));
+  }
+
+  for (const tg of tagGroupsToCreate) {
+    existingTagGroups.push(await createTagGroup(tg));
+  }
+
+  for (const tg of tagGroupsToUpdate) {
+    const updated = await updateTagGroup(tg);
+    Object.assign(existingTagGroups.find(({ name }) => tg.name === name), tg);
+  }
+
+  for (const c of existingCollectives) {
+    const { tag, description, collective: name } = colArr.find(({ collective }) => collective === c.name);
+    const full = `${tag}  \n\n${description}`;
+    const aboutTopic = await getCollectiveAboutTopic(c);
+    const idealTitle = `About the ${name}`;
+    if (aboutTopic.title !== idealTitle) {
+      await updateTopic(aboutTopic, idealTitle);
+    }
+    const topicPost = await getTopicFirstPost(aboutTopic);
+    if (topicPost.raw !== full) {
+      await updatePost(topicPost.id, full);
+    }
+  }
+
   console.log(
     '✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨  DONE ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨',
   );
