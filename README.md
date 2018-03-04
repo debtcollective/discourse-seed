@@ -4,13 +4,20 @@ Something to keep in mind when adding anything here is that you should always ch
 
 Discourse API docs are [here](docs.discourse.org).
 
-## Environment Variables
+## Secret Variables
 
-This script requires a couple environment variables to work. These all have defaults in the script but they'll only work locally, and even then you'll need to update the API key and user at least.
+This script requires a couple secrets to work. Really only one of these is a secret but :woman-shrugging:. These all have defaults in the script but you'll need to update the API key.
 
-* `DISCOURSE_API_KEY`:
-  This key is generated in the Admin dashboard. The key in there is a bogus one so it won't work anywhere.
-* `DISCOURSE_API_USERNAME`:
-  Discourse username of the person who owns the key. If you make a topic or post or anything like that, it's going to say that the person with this username made it.
-* `DISCOURSE_URL`:
-  The URL of the Discourse instance. Defaults to the default local URL, localhost:3000
+Create a `secrets.js` file that looks like this:
+
+```javascript
+module.exports = {
+  // This key is generated in the Discourse admin dashboard under the API tab
+  api_key: '',
+  // System is a default hidden user that's useful for stuff like this that we
+  // don't necessarily want to attribute to any specific user
+  api_username: 'system',
+  // Discourse's location
+  api_url: 'http://localhost:3000',
+};
+```
