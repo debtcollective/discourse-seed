@@ -6,9 +6,8 @@ defaults: &defaults
     - image: circleci/node:8.9.1
 
 jobs:
-  build:
+  seed_staging:
     <<: *defaults
-
     steps:
       - checkout
       - restore_cache:
@@ -21,33 +20,28 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
-      
-      - persist_to_workspace:
-          root: ~/tdc-discourse-seed
-          paths:
-            - ./*
-  
-  seed_staging:
-    <<: *defaults
-    requires: build
-    steps:
-      - attach_workspace:
-          at: ~/tdc-discourse-seed
       - run: bash seed.sh staging
 
   seed_production:
     <<: *defaults
-    requires: build
     steps:
-      - attach_workspace:
-          at: ~/tdc-discourse-seed
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "yarn.lock" }}
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
       - run: bash seed.sh production
 
 workflows:
   version: 2
   seed:
     jobs:
-      - build
       - hold:
           type: approval
           filters:
