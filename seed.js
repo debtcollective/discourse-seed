@@ -2,7 +2,7 @@ module.exports = {
   tagGroups: [
     {
       name: 'Campaigns',
-      tag_names: ['MedicareForAll'],
+      tag_names: ['medicare-for-all'],
     },
   ],
   groups: ['dispute-admin'],

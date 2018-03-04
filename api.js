@@ -1,4 +1,5 @@
 const sa = require('superagent').agent();
+const { collectives } = require('./seed');
 
 const {
   DISCOURSE_API_KEY: api_key = 'f6efc2b524eaeffa347d66444c0dd97ef1749703a97ad3b45913f52467fd683a',
@@ -82,19 +83,24 @@ const updateTopic = (exports.updateTopic = ({ slug, id }, title) =>
     })
     .then(({ body }) => body));
 
-const updateTagGroup = (exports.updateTagGroup = ({ id, name, tag_names }) =>
-  sa
-    .put(DISCOURSE_URL + '/tag_groups/' + id + '.json')
-    .field({ name, tag_names: JSON.stringify(tag_names), api_key, api_username }));
+const updateTagGroup = (exports.updateTagGroup = ({ id, name, tag_names }) => {
+  const req = sa.put(DISCOURSE_URL + '/tag_groups/' + id + '.json').field({ name, api_key, api_username });
 
-const createTagGroup = (exports.createTagGroup = ({ name, tag_names }) =>
-  sa
-    .post(DISCOURSE_URL + '/tag_groups.json')
-    .field({ name, tag_names: JSON.stringify(tag_names), api_key, api_username })
-    .then(({ body }) => {
-      body;
-      return body;
-    }));
+  tag_names.forEach(tn => req.field('tag_names[]', tn));
+
+  return req.then(({ body }) => body);
+});
+
+const createTagGroup = (exports.createTagGroup = ({ name, tag_names }) => {
+  const req = sa.post(DISCOURSE_URL + '/tag_groups.json').field({ name, api_key, api_username });
+
+  tag_names.forEach(tn => req.field('tag_names[]', tn));
+
+  return req.then(({ body }) => {
+    body;
+    return body;
+  });
+});
 
 const getPost = (exports.getPost = id => sa.get(DISCOURSE_URL + '/posts/' + id + '.json').then(({ body }) => body));
 

@@ -47,6 +47,17 @@ async function main() {
         existingGroups.push(await createGroup(group));
       }),
     ),
+    Promise.all(
+      tagGroupsToCreate.map(async tg => {
+        existingTagGroups.push(await createTagGroup(tg));
+      }),
+    ),
+    Promise.all(
+      tagGroupsToUpdate.map(async tg => {
+        const updated = await updateTagGroup(tg);
+        Object.assign(existingTagGroups.find(({ name }) => tg.name === name), tg);
+      }),
+    ),
   ]);
 
   const re = await Promise.all(
