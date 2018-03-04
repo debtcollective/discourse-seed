@@ -30,11 +30,15 @@ async function main() {
   );
   const tagGroupsToCreate = tagGroups.filter(({ name }) => !existingTagGroups.find(tg => tg.name === name));
   const tagGroupsToUpdate = tagGroups
-    .filter(
-      ({ name, tag_names }) =>
-        !existingTagGroups.find(tg => tg.name === name && tag_names.every(n => tg.tag_names.includes(n))),
-    )
-    .map(tg => Object.assign(tg, { id: existingTagGroups.find(e => e.name === tg.name).id }));
+    .filter(({ name }) => !tagGroupsToCreate.find(tg => tg.name === name))
+    .reduce((acc, tg) => {
+      const match = existingTagGroups.find(tg => tg.name === name);
+      if (tg.tag_names.every(n => match.tag_names.includes(n))) {
+        return [...acc, Object.assign(tg, { id: match.id })];
+      } else {
+        return acc;
+      }
+    });
 
   await Promise.all([
     Promise.all(
