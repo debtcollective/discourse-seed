@@ -31,10 +31,7 @@ const getExistingGroups = () =>
   sa
     .get(DISCOURSE_URL + '/groups/search.json')
     .query({ api_key, api_username })
-    .then(({ body: groups }) => {
-      const groupNames = Object.keys(collectives).map(k => collectives[k].group);
-      return groups.filter(g => groupNames.includes(g.name));
-    });
+    .then(({ body: groups }) => groups);
 
 const getExistingTagGroups = () =>
   sa
@@ -152,7 +149,9 @@ async function main() {
       return topicPost.raw !== full ? updatePost(topicPost.id, full) : Promise.resolve();
     }),
   );
-  console.log();
+  console.log(
+    '✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨  DONE ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨',
+  );
 }
 
 main().catch(console.error);
