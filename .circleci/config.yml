@@ -33,3 +33,12 @@ jobs:
       - attach_workspace:
           at: ~/tdc-discourse-seed
       - run: bash seed.sh staging
+
+workflows:
+  version: 2
+  staging:
+    jobs:
+      - build
+      - seed_staging:
+          requires:
+            - build
