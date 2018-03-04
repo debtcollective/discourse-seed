@@ -29,10 +29,19 @@ jobs:
   
   seed_staging:
     <<: *defaults
+    requires: build
     steps:
       - attach_workspace:
           at: ~/tdc-discourse-seed
       - run: bash seed.sh staging
+
+  seed_production:
+    <<: *defaults
+    requires: build
+    steps:
+      - attach_workspace:
+          at: ~/tdc-discourse-seed
+      - run: bash seed.sh production
 
 workflows:
   version: 2
