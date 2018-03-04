@@ -2,8 +2,8 @@ const sa = require('superagent').agent();
 const { collectives } = require('./seed');
 
 const {
-  DISCOURSE_API_KEY: api_key = 'f6efc2b524eaeffa347d66444c0dd97ef1749703a97ad3b45913f52467fd683a',
-  DISCOURSE_API_USERNAME: api_username = 'asdf',
+  DISCOURSE_API_KEY: api_key = '',
+  DISCOURSE_API_USERNAME: api_username = 'system',
   DISCOURSE_URL = 'http://localhost:3000',
 } = process.env;
 
