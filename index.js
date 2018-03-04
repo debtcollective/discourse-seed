@@ -78,4 +78,7 @@ async function main() {
   );
 }
 
-main().catch(console.error);
+main().catch((...args) => {
+  console.error(...args);
+  process.exit(1);
+});
