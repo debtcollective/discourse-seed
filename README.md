@@ -23,3 +23,14 @@ module.exports = {
   api_url: 'http://localhost:3000',
 };
 ```
+
+## Steps for enabling in new Discourse environments
+
+1.  Enable tagging in Discourse (Admin Dashboard -> Settings -> Tags -> enable topic tags)
+2.  Generate an API key for the system user (Admin Dashboard -> Users -> system -> generate API key)
+3.  Create a `secrets.<env>.js` as described above
+4.  Upload the secrets file to tdc-secure S3 bucket ensuring public access is OFF. Only the CI policy will have access to this file.
+5.  Create a job in the CI workflow for the environment, mirroring how the other environments have it. Note that `seed.sh` takes a single variable of the environment which should match the `<env>` part of the `secrets.<env>.js` from before
+6.  Restrict that job to a specific branch.
+7.  Push that branch and release the hold in Circle CI for that build.
+8.  Success!
