@@ -6,7 +6,9 @@ Discourse API docs are [here](docs.discourse.org).
 
 ## Secret Variables
 
-This script requires a couple secrets to work. Really only one of these is a secret but :woman-shrugging:. These all have defaults in the script but you'll need to update the API key.
+This script requires a couple secrets to work. Really only one of these is a secret but :woman_shrugging:. These all have defaults in the script but you'll need to update the API key.
+
+If you start getting an access denied error during the `tag_group` creation, make sure your Discourse instance has tagging enabled otherwise it'll block you! [Evidence of that is here.](https://github.com/discourse/discourse/blob/a94dc0c7311f744bb8d5801787b0a1a5df0f036b/lib/guardian/tag_guardian.rb#L19).
 
 Create a `secrets.js` file that looks like this:
 
