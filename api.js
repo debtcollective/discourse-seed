@@ -88,7 +88,7 @@ const updateTagGroup = (exports.updateTagGroup = ({ id, name, tag_names, once_pe
 });
 
 const createTagGroup = (exports.createTagGroup = ({ name, tag_names, once_per_topic }) => {
-  const req = sa.post(api_url + '/tag_groups').field({ name, api_key, api_username, once_per_topic });
+  const req = sa.post(api_url + '/tag_groups.json').field({ name, api_key, api_username, once_per_topic });
 
   tag_names.forEach(tn => req.field('tag_names[]', tn));
 
