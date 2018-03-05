@@ -33,7 +33,7 @@ async function main() {
     .filter(({ name }) => !tagGroupsToCreate.find(tg => tg.name === name))
     .reduce((acc, tg) => {
       const match = existingTagGroups.find(e => e.name === tg.name);
-      if (tg.tag_names.every(n => match.tag_names.includes(n))) {
+      if (tg.tag_names.every(n => match.tag_names.includes(n)) || tg.once_per_topic !== match.once_per_topic) {
         return [...acc, Object.assign(tg, { id: match.id })];
       } else {
         return acc;

@@ -3,6 +3,7 @@ module.exports = {
     {
       name: 'Campaigns',
       tag_names: ['medicare-for-all'],
+      once_per_topic: false,
     },
   ],
   groups: ['dispute-admin'],

@@ -79,16 +79,16 @@ const updateTopic = (exports.updateTopic = ({ slug, id }, title) =>
     })
     .then(({ body }) => body));
 
-const updateTagGroup = (exports.updateTagGroup = ({ id, name, tag_names }) => {
-  const req = sa.put(api_url + '/tag_groups/' + id + '.json').field({ name, api_key, api_username });
+const updateTagGroup = (exports.updateTagGroup = ({ id, name, tag_names, once_per_topic }) => {
+  const req = sa.put(api_url + '/tag_groups/' + id + '.json').field({ name, api_key, api_username, once_per_topic });
 
   tag_names.forEach(tn => req.field('tag_names[]', tn));
 
   return req.then(({ body }) => body);
 });
 
-const createTagGroup = (exports.createTagGroup = ({ name, tag_names }) => {
-  const req = sa.post(api_url + '/tag_groups.json').field({ name, api_key, api_username });
+const createTagGroup = (exports.createTagGroup = ({ name, tag_names, once_per_topic }) => {
+  const req = sa.post(api_url + '/tag_groups').field({ name, api_key, api_username, once_per_topic });
 
   tag_names.forEach(tn => req.field('tag_names[]', tn));
 
