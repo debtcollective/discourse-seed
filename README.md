@@ -2,7 +2,7 @@ This is a simple script. Let's keep it that way. Put API calls in `api.js` and r
 
 Something to keep in mind when adding anything here is that you should always check to make sure the resource you're creating doesn't already exist, otherwise we'll end up with a tangled mess to untie in the first environment we deploy the new version against. You can see this strategy already happening by calling to get all the categories first, then filtering the collectives that are already created.
 
-Discourse API docs are [here](docs.discourse.org).
+Discourse API docs are [here](http://docs.discourse.org).
 
 ## Secret Variables
 
