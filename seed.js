@@ -116,36 +116,26 @@ We are committed to direct action, mutual aid and campaign support.`,
 
 const customUserFields = [
   {
-    name: 'collective',
-    description: 'What kind of debt, or joining in solidarity.',
-    field_type: 'dropdown',
-    editable: true,
-    required: true,
-    show_on_profile: true,
-    show_on_user_card: true,
-    options: Object.keys(collectives).map(key => collectives[key].collective),
-  },
-  {
-    name: 'debt-amount',
-    description: "We ask new users with debt what they're total debt is.",
+    name: 'Debt Amount',
+    description: 'A number greater than 0',
     field_type: 'text',
   }, // actually a number
   {
-    name: 'solidarity-help',
-    description: 'When users join in solidarity, we ask what they could do to help.',
+    name: 'How Can You Help?',
+    description: 'What can you do to help?',
     field_type: 'text',
   },
   {
-    name: 'solidarity-job',
-    description: 'When users join in solidarity, we ask what they do for a living.',
+    name: 'Employment',
+    description: 'Give us an idea of where you work',
     field_type: 'text',
   },
   {
-    name: 'solidarity-skills',
-    description: 'When users join in solidarity, we ask what their skills/competencies are.',
+    name: 'Skills And Competencies',
+    description: 'What are you good at?',
     field_type: 'text',
   },
-  { name: 'phone', description: 'Phone number', field_type: 'text' },
+  { name: 'Phone Number', description: '9 or 10 digits', field_type: 'text' },
 ];
 
 module.exports = { collectives, tagGroups, groups, customUserFields };

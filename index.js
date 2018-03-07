@@ -44,7 +44,7 @@ async function main() {
       }
     }, []);
   const customUserFieldsToCreate = customUserFields.filter(
-    ({ name }) => !existingCustomUserFields.find(fld => fld.name === name),
+    ({ name }) => !existingCustomUserFields.map(field => field.name).includes(name),
   );
 
   for (const { collective } of collectivesToCreate) {

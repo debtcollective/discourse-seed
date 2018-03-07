@@ -42,14 +42,10 @@ const createCustomUserField = (exports.createCustomUserField = async user_field 
   if (user_field.field_type === 'dropdown') {
     const existing_fields = await getCustomUserFields();
     // assumption: all user fields will have unique names
-    const matching_fields = existing_fields.filter(test_field => test_field.name === user_field.name);
+    const matching_fields = existing_fields.filter(field => field.name === user_field.name);
     console.assert(
       matching_fields.length === 1,
-      'There are ' +
-        matching_fields.length +
-        ' custom user fields with name ' +
-        user_fields.name +
-        ' or there are none.',
+      'There are ' + matching_fields.length + ' custom user fields with name ' + user_field.name,
     );
 
     // update the custom user field with the options
