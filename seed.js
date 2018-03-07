@@ -118,8 +118,8 @@ const customUserFields = [
   {
     name: 'Debt Amount',
     description: 'A number greater than 0',
-    field_type: 'text',
-  }, // actually a number
+    field_type: 'text', // discourse's custom user fields doesn't have a "decimal" or "integer" option
+  },
   {
     name: 'How Can You Help?',
     description: 'What can you do to help?',

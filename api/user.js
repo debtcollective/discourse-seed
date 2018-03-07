@@ -23,12 +23,12 @@ const getCustomUserFields = (exports.getCustomUserFields = () =>
 const createCustomUserField = (exports.createCustomUserField = async user_field => {
   console.assert(['text', 'confirm', 'dropdown'].includes(user_field.field_type));
 
-  let options_string;
+  let optionsString;
   if (user_field.field_type === 'dropdown') {
     // sending lists via http is finicky, so we'll do it in a second API call
     const httpify = (cumulative, option) => cumulative + '&user_field[options][]=' + option;
-    options_string = user_field.options.reduce(httpify, '') + '&api_key=' + api_key + '&api_username=' + api_username;
-    options_string = options_string.slice(1); // get rid of the ampersand at the beginning
+    optionsString = user_field.options.reduce(httpify, '') + '&api_key=' + api_key + '&api_username=' + api_username;
+    optionsString = optionsString.slice(1); // get rid of the ampersand at the beginning
     delete user_field.options; // if we don't delete it, the first api call won't work
   }
 
@@ -40,18 +40,18 @@ const createCustomUserField = (exports.createCustomUserField = async user_field 
 
   // if it isn't a dropdown, we're done! If it is ...
   if (user_field.field_type === 'dropdown') {
-    const existing_fields = await getCustomUserFields();
+    const existingFields = await getCustomUserFields();
     // assumption: all user fields will have unique names
-    const matching_fields = existing_fields.filter(field => field.name === user_field.name);
+    const matchingFields = existingFields.filter(field => field.name === user_field.name);
     console.assert(
-      matching_fields.length === 1,
-      'There are ' + matching_fields.length + ' custom user fields with name ' + user_field.name,
+      matchingFields.length === 1,
+      'There are ' + matchingFields.length + ' custom user fields with name ' + user_field.name,
     );
 
     // update the custom user field with the options
     await sa
-      .put('http://localhost:3000/admin/customize/user_fields/' + matching_fields[0].id)
+      .put('http://localhost:3000/admin/customize/user_fields/' + matchingFields[0].id)
       .type('form')
-      .send(options_string);
+      .send(optionsString);
   }
 });
