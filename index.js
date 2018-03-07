@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const { collectives, groups, tagGroups } = require('./seed');
+const { collectives, groups, tagGroups, customUserFields } = require('./seed');
 const colArr = Object.keys(collectives).map(k => collectives[k]);
 const {
   noNulls,
@@ -17,12 +17,16 @@ const {
   updatePost,
   updateTagGroup,
   updateTopic,
+  getArbitraryUser,
+  getCustomUserFields,
+  createCustomUserField,
 } = require('./api');
 
 async function main() {
   const existingCollectives = await getExistingCollectives();
   const existingGroups = await getExistingGroups();
   const existingTagGroups = await getExistingTagGroups();
+  const existingCustomUserFields = await getCustomUserFields();
 
   const collectivesToCreate = colArr.filter(({ collective }) => !existingCollectives.find(c => c.name === collective));
   const groupsToCreate = [...colArr.map(({ group }) => group), ...groups].filter(
@@ -39,6 +43,9 @@ async function main() {
         return acc;
       }
     }, []);
+  const customUserFieldsToCreate = customUserFields.filter(
+    ({ name }) => !existingCustomUserFields.find(fld => fld.name === name),
+  );
 
   for (const { collective } of collectivesToCreate) {
     existingCollectives.push(await createCollective(collective));
@@ -55,6 +62,10 @@ async function main() {
   for (const tg of tagGroupsToUpdate) {
     const updated = await updateTagGroup(tg);
     Object.assign(existingTagGroups.find(({ name }) => tg.name === name), tg);
+  }
+
+  for (const customUserField of customUserFieldsToCreate) {
+    existingCustomUserFields.push(await createCustomUserField(customUserField));
   }
 
   for (const c of existingCollectives) {
