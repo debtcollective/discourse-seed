@@ -1,12 +1,11 @@
 const { collectives, groups, tagGroups, customUserFields } = require('./seed');
 const colArr = Object.keys(collectives).map(k => collectives[k]);
-const { collective, campaign, topic, user } = require('./api');
+const { collective, campaign, topic } = require('./api');
 
 async function main() {
   const existingCollectives = await collective.getExistingCollectives();
   const existingGroups = await collective.getExistingGroups();
   const existingTagGroups = await campaign.getExistingTagGroups();
-  const existingCustomUserFields = await user.getCustomUserFields();
 
   const collectivesToCreate = colArr.filter(({ collective }) => !existingCollectives.find(c => c.name === collective));
   const groupsToCreate = [...colArr.map(({ group }) => group), ...groups].filter(
@@ -23,9 +22,6 @@ async function main() {
         return acc;
       }
     }, []);
-  const customUserFieldsToCreate = customUserFields.filter(
-    ({ name }) => !existingCustomUserFields.map(field => field.name).includes(name),
-  );
 
   for (const { collective } of collectivesToCreate) {
     existingCollectives.push(await collective.createCollective(collective));
@@ -42,10 +38,6 @@ async function main() {
   for (const tg of tagGroupsToUpdate) {
     const updated = await campaign.updateTagGroup(tg);
     Object.assign(existingTagGroups.find(({ name }) => tg.name === name), tg);
-  }
-
-  for (const customUserField of customUserFieldsToCreate) {
-    existingCustomUserFields.push(await user.createCustomUserField(customUserField));
   }
 
   for (const c of existingCollectives) {

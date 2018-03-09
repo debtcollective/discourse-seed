@@ -114,69 +114,6 @@ We are committed to direct action, mutual aid and campaign support.`,
   },
 };
 
-var customUserFields = [
-  {
-    name: 'Debt Type',
-    description: 'Solidarity Bloc',
-    field_type: 'confirm',
-    editable: true,
-  },
-  {
-    name: 'Debt Type',
-    description: '',
-    field_type: 'confirm',
-    editable: true,
-  },
-  {
-    name: 'Debt Type',
-    description: 'Solidarity Bloc',
-    field_type: 'confirm',
-    editable: true,
-  },
-  {
-    name: 'Debt Type',
-    description: 'Solidarity Bloc',
-    field_type: 'confirm',
-    editable: true,
-  },
-  {
-    name: 'Debt Type',
-    description: 'Solidarity Bloc',
-    field_type: 'confirm',
-    editable: true,
-  },
-  {
-    name: 'Debt Type',
-    description: 'Solidarity Bloc',
-    field_type: 'confirm',
-    editable: true,
-  },
-  {
-    name: 'Debt Amount',
-    description: 'A number greater than 0',
-    field_type: 'text', // discourse's custom user fields doesn't have a "decimal" or "integer" option
-    editable: true,
-  },
-  {
-    name: 'How Can You Help?',
-    description: 'What can you do to help?',
-    field_type: 'text',
-    editable: true,
-  },
-  {
-    name: 'Employment',
-    description: 'Give us an idea of where you work',
-    field_type: 'text',
-    editable: true,
-  },
-  {
-    name: 'Skills And Competencies',
-    description: 'What are you good at?',
-    field_type: 'text',
-    editable: true,
-  },
-  { name: 'Phone Number', description: '9 or 10 digits', field_type: 'text', editable: true },
-];
 const customFieldPerCollective = Object.keys(collectives).map(key => {
   return {
     name: collectives[key].collective,
@@ -185,6 +122,5 @@ const customFieldPerCollective = Object.keys(collectives).map(key => {
     editable: true,
   };
 });
-customUserFields = customUserFields.concat(customFieldPerCollective);
 
-module.exports = { collectives, tagGroups, groups, customUserFields };
+module.exports = { collectives, tagGroups, groups };
