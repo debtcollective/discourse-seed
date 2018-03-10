@@ -1,8 +1,19 @@
-This is a simple script. Let's keep it that way. Put API calls in `api.js` and require them into the main `index.js` script. Seed data should go in `seed.js` and be organized in a logical manner.
+Module for seeding the Debt Syndicate's Discourse instances with Collectives, User Groups, Wikis and anything else we need to bend Discourse to our purposes.
 
-Something to keep in mind when adding anything here is that you should always check to make sure the resource you're creating doesn't already exist, otherwise we'll end up with a tangled mess to untie in the first environment we deploy the new version against. You can see this strategy already happening by calling to get all the categories first, then filtering the collectives that are already created.
+## Guidance for contributors
 
-Discourse API docs are [here](http://docs.discourse.org).
+There is currently a clear separation between the discourse API code and the code that actually does the seeding.
+Each logical grouping of seeds should go in their own file in the `seeds` folder and export a single `async` function. This function should get called in `index.js` in the `main` function, like the existing seed modules are currently being called.
+
+Require in the discourse API from the discourse folder. Do not use super agent to call the API directly. The API utilities automatically handle authentication and the various quirks of Discourse's REST API like making sure the models passed in do not result in a 400 request because you passed a JSON object to a POST's field or dealing with the odd request where you have to pass the properties as properties of some other entity (like `posts` or the permissions on a category). If you are adding to the Discourse API, note that you should continue to maintain that guarantee. If you find that making a request in a certain way will break the API, _prevent that from being done in the API method_. We've attempted to maintain a separation between Discourse's data model and our own. To maintain this, try not to reference Debt Syndicate specific stuff in the Discourse API. Eventually we can move the Discourse API to a publishable NPM module, but for now it's not comprehensive enough and would need a lot more documentation and testing before being released generally.
+
+Always sleep before making an API call. Three quarters of a second is the default length of time and it seems strike the right balance between speed and infrequency to prevent Discourse's API from rate limiting you. This isn't built into the API because well, maybe you want to get rate limited, who knows. Just know that it's preventable by sleeping before making the call.
+
+Any unhandled error _will_ kill the script, so handle them early if you expect them.
+
+Discourse API docs are [here](http://docs.discourse.org). The docs are kinda bad though, so the best thing to do is use Wireshark and sniff an API call after making it manually through the front-end and mimicking that through the Discourse API. Most endpoints work using the same exact route that the front-end uses. If it doesn't, try putting `.json` on the end of the route. More information about reverse-engineering the API [here](https://meta.discourse.org/t/how-to-reverse-engineer-the-discourse-api/20576). The main pain-point of the documentation is that almost _none_ of the interesting properties that are editable in a PUT or POST are documented, so the best thing to do really is to figure it out through reverse engineering and not waste your time with the documentation unless you're going to contribute to them (maybe once we have time we'll do that and make the Discourse API docs real nice to use).
+
+Open a PR, get it reviewed and approved by a maintainer and once it is merged the CI will seed staging once a maintainer removes the CI hold. 🎊
 
 ## Secret Variables
 
@@ -34,4 +45,3 @@ module.exports = {
 6.  Restrict that job to a specific branch.
 7.  Push that branch and release the hold in Circle CI for that build.
 8.  Success!
-
