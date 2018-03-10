@@ -10,6 +10,14 @@ const collectiveGroup = {
   default_notification_level: 3,
 };
 
+const collectiveDefaults = {
+  'permissions[admins]': '1',
+  'permissions[trust_level_3]': '1',
+  'permissions[trust_level_4]': '1',
+  color: 'FF4630',
+  text_color: '2B2B2B',
+};
+
 const tagGroups = [
   {
     name: 'Campaigns',
@@ -58,6 +66,7 @@ Debt has isolated us and made us feel alone and ashamed. We have come out of the
       name: 'For Profit Colleges Collective',
       text_color: '',
       color: '',
+      ...collectiveDefaults,
     },
   },
   studentDebtCollective: {
@@ -84,6 +93,7 @@ Debt has isolated us and made us feel alone and ashamed. We have come out of the
       name: 'Student Debt Collective',
       text_color: '',
       color: '',
+      ...collectiveDefaults,
     },
   },
   creditDebtCollective: {
@@ -110,6 +120,7 @@ Debt has isolated us and made us feel alone and ashamed. We have come out of the
       name: 'Credit Card Debt Collective',
       text_color: '',
       color: '',
+      ...collectiveDefaults,
     },
   },
   housingDebtCollective: {
@@ -136,6 +147,7 @@ Debt has isolated us and made us feel alone and ashamed. We have come out of the
       name: 'Housing Debt Collective',
       text_color: '',
       color: '',
+      ...collectiveDefaults,
     },
   },
   paydayLoansCollective: {
@@ -162,6 +174,7 @@ Debt has isolated us and made us feel alone and ashamed. We have come out of the
       name: 'Payday Loans Collective',
       text_color: '',
       color: '',
+      ...collectiveDefaults,
     },
   },
   autoLoansCollective: {
@@ -188,6 +201,7 @@ Debt has isolated us and made us feel alone and ashamed. We have come out of the
       name: 'Auto Loans Collective',
       text_color: '',
       color: '',
+      ...collectiveDefaults,
     },
   },
   courtFinesCollective: {
@@ -195,6 +209,7 @@ Debt has isolated us and made us feel alone and ashamed. We have come out of the
       name: 'Court Fines and Fees Collective',
       text_color: '',
       color: '',
+      ...collectiveDefaults,
     },
     group: {
       name: 'court-fines-fees',
@@ -240,6 +255,7 @@ Debt has isolated us and made us feel alone and ashamed. We have come out of the
       name: 'Medical Debt Collective',
       text_color: '',
       color: '',
+      ...collectiveDefaults,
     },
   },
   solidarityBloc: {
@@ -262,6 +278,7 @@ We are committed to direct action, mutual aid and campaign support.`,
       text_color: '',
       color: '',
       name: 'Solidarity Bloc',
+      ...collectiveDefaults,
     },
   },
 };
@@ -277,7 +294,7 @@ const customFieldPerCollective = Object.keys(collectives).map(key => {
 
 Object.keys(collectives).forEach(key => {
   const { category, group } = collectives[key];
-  category[`permissions[${group.name}]`] = 1;
+  category[`permissions[${group.name}]`] = '1';
 });
 
 module.exports = { collectives, tagGroups, groups };
