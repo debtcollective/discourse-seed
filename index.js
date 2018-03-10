@@ -3,6 +3,7 @@ const colArr = Object.keys(collectives).map(k => collectives[k]);
 const { collective, campaign, topic } = require('./api');
 
 async function main() {
+  console.log('Beginning seed');
   const existingCollectives = await collective.getExistingCollectives();
   const existingGroups = await collective.getExistingGroups();
   const existingTagGroups = await campaign.getExistingTagGroups();
