@@ -1,126 +1,282 @@
+const { enums: { levels } } = require('./discourse');
+
+const collectiveGroup = {
+  mentionable_level: levels.membersModsAndAdmins,
+  messageable_level: levels.membersModsAndAdmins,
+  visbility_level: levels.membersModsAndAdmins,
+  primary_group: true,
+  public_admission: false,
+  allow_membership_requests: false,
+  default_notification_level: 3,
+};
+
 const tagGroups = [
   {
     name: 'Campaigns',
     tag_names: ['medicare-for-all'],
-    once_per_topic: false,
+    one_per_topic: false,
   },
 ];
-const groups = ['dispute-admin'];
+
+const groups = [
+  {
+    name: 'dispute-admin',
+    full_name: 'Dispute Administrator',
+    mentionable_level: levels.everyone,
+    messageable_level: levels.everyone,
+    visbility_level: levels.everyone,
+    primary_group: true,
+    public_admission: false,
+    allow_membership_requests: false,
+    default_notification_level: 3,
+  },
+];
 
 const collectives = {
   forProfitCollective: {
-    group: 'for-profit-colleges',
-    collective: 'For Profit Colleges Collective',
-    tag: 'For anyone who is in debt after attending a for-profit college.',
-    description: `### We are former for-profit college students who have joined with others in our situation to fight back against predatory creditors and the federal government.
+    group: {
+      name: 'for-profit-colleges',
+      full_name: 'For Profit Colleges Collective',
+      ...collectiveGroup,
+    },
+    topic: {
+      title: 'About the For Profit Colleges Collective',
+    },
+    post: {
+      raw: `For anyone who is in debt after attending a for-profit college.
+    
+### We are former for-profit college students who have joined with others in our situation to fight back against predatory creditors and the federal government.
 
 We fight because it is wrong that 40 percent of people in debt use credit cards to cover basic living costs including rent, food, and utilities. It is wrong that 62 percent of personal bankruptcies in the U.S. are linked to medical debt. It is wrong that students are leaving college owing an average of $35,000, and millions are in default. It is wrong that payday lenders earn high profits from poverty. And it is wrong that local court systems target poor people, disproportionately black and brown, and load them up with debt.
 
 We are different in many ways. Some of us are old, and some are young; we are from different parts of the country; we are diverse in race, ethnicity and religious background. A common belief unites us: everyone should have access to the goods and services they need to live without going broke or going into debt.
 
 Debt has isolated us and made us feel alone and ashamed. We have come out of the shadows to fight back as individuals and as a collective. We are here because we are organizing to win debt relief and a better economic system for all.`,
+    },
+    category: {
+      name: 'For Profit Colleges Collective',
+      text_color: '',
+      color: '',
+    },
   },
   studentDebtCollective: {
-    group: 'student-debt',
-    collective: 'Student Debt Collective',
-    tag: 'For anyone who has student loans.',
-    description: `### We are student debtors who have joined with others in our situation to fight back against predatory creditors and the federal government.
+    group: {
+      name: 'student-debt',
+      full_name: 'Student Debt Collective',
+      ...collectiveGroup,
+    },
+    topic: {
+      title: 'About the Student Debt Collective',
+    },
+    post: {
+      raw: `For anyone who has student loans.
+    
+### We are student debtors who have joined with others in our situation to fight back against predatory creditors and the federal government.
 
 We fight because it is wrong that 40 percent of people in debt use credit cards to cover basic living costs including rent, food, and utilities. It is wrong that 62 percent of personal bankruptcies in the U.S. are linked to medical debt. It is wrong that students are leaving college owing an average of $35,000, and millions are in default. It is wrong that payday lenders earn high profits from poverty. And it is wrong that local court systems target poor people, disproportionately black and brown, and load them up with debt.
 
 We are different in many ways. Some of us are old, and some are young; we are from different parts of the country; we are diverse in race, ethnicity and religious background. A common belief unites us: everyone should have access to the goods and services they need to live without going broke or going into debt.
 
 Debt has isolated us and made us feel alone and ashamed. We have come out of the shadows to fight back as individuals and as a collective. We are here because we are organizing to win debt relief and a better economic system for all.`,
+    },
+    category: {
+      name: 'Student Debt Collective',
+      text_color: '',
+      color: '',
+    },
   },
   creditDebtCollective: {
-    group: 'credit-card-debt',
-    collective: 'Credit Card Debt Collective',
-    tag: 'For anyone who has credit card debt.',
-    description: `### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
+    group: {
+      name: 'credit-card-debt',
+      full_name: 'Credit Card Debt Collective',
+      ...collectiveGroup,
+    },
+    topic: {
+      title: 'About the Credit Card Debt Collective',
+    },
+    post: {
+      raw: `For anyone who has credit card debt.
+    
+### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
 
 We fight because it is wrong that 40 percent of people in debt use credit cards to cover basic living costs including rent, food, and utilities. It is wrong that 62 percent of personal bankruptcies in the U.S. are linked to medical debt. It is wrong that students are leaving college owing an average of $35,000, and millions are in default. It is wrong that payday lenders earn high profits from poverty. And it is wrong that local court systems target poor people, disproportionately black and brown, and load them up with debt.
 
 We are different in many ways. Some of us are old, and some are young; we are from different parts of the country; we are diverse in race, ethnicity and religious background. A common belief unites us: everyone should have access to the goods and services they need to live without going broke or going into debt.
 
 Debt has isolated us and made us feel alone and ashamed. We have come out of the shadows to fight back as individuals and as a collective. We are here because we are organizing to win debt relief and a better economic system for all.`,
+    },
+    category: {
+      name: 'Credit Card Debt Collective',
+      text_color: '',
+      color: '',
+    },
   },
   housingDebtCollective: {
-    group: 'housing-debt',
-    collective: 'Housing Debt Collective',
-    tag: 'For anyone who went into debt for a place to live.',
-    description: `### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
+    group: {
+      name: 'housing-debt',
+      full_name: 'Housing Debt Collective',
+      ...collectiveGroup,
+    },
+    topic: {
+      title: 'About the Housing Debt Collective',
+    },
+    post: {
+      raw: `For anyone who went into debt for a place to live.
+    
+### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
 
 We fight because it is wrong that 40 percent of people in debt use credit cards to cover basic living costs including rent, food, and utilities. It is wrong that 62 percent of personal bankruptcies in the U.S. are linked to medical debt. It is wrong that students are leaving college owing an average of $35,000, and millions are in default. It is wrong that payday lenders earn high profits from poverty. And it is wrong that local court systems target poor people, disproportionately black and brown, and load them up with debt.
 
 We are different in many ways. Some of us are old, and some are young; we are from different parts of the country; we are diverse in race, ethnicity and religious background. A common belief unites us: everyone should have access to the goods and services they need to live without going broke or going into debt.
 
 Debt has isolated us and made us feel alone and ashamed. We have come out of the shadows to fight back as individuals and as a collective. We are here because we are organizing to win debt relief and a better economic system for all.`,
+    },
+    category: {
+      name: 'Housing Debt Collective',
+      text_color: '',
+      color: '',
+    },
   },
   paydayLoansCollective: {
-    group: 'payday-loans',
-    collective: 'Payday Loans Collective',
-    tag: 'For anybody in debt to a payday lender or check casher.',
-    description: `### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
+    group: {
+      name: 'payday-loans',
+      full_name: 'Payday Loans Collective',
+      ...collectiveGroup,
+    },
+    topic: {
+      title: 'About the Payday Loans Collective',
+    },
+    post: {
+      raw: `For anybody in debt to a payday lender or check casher.
+    
+### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
 
 We fight because it is wrong that 40 percent of people in debt use credit cards to cover basic living costs including rent, food, and utilities. It is wrong that 62 percent of personal bankruptcies in the U.S. are linked to medical debt. It is wrong that students are leaving college owing an average of $35,000, and millions are in default. It is wrong that payday lenders earn high profits from poverty. And it is wrong that local court systems target poor people, disproportionately black and brown, and load them up with debt.
 
 We are different in many ways. Some of us are old, and some are young; we are from different parts of the country; we are diverse in race, ethnicity and religious background. A common belief unites us: everyone should have access to the goods and services they need to live without going broke or going into debt.
 
 Debt has isolated us and made us feel alone and ashamed. We have come out of the shadows to fight back as individuals and as a collective. We are here because we are organizing to win debt relief and a better economic system for all.`,
+    },
+    category: {
+      name: 'Payday Loans Collective',
+      text_color: '',
+      color: '',
+    },
   },
   autoLoansCollective: {
-    group: 'auto-loans',
-    collective: 'Auto Loans Collective',
-    tag: 'For anyone who went into debt to buy a car.',
-    description: `### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
-
+    group: {
+      name: 'auto-loans',
+      full_name: 'Auto Loans Collective',
+      ...collectiveGroup,
+    },
+    topic: {
+      title: 'About the Auto Loans Collective',
+    },
+    post: {
+      raw: `For anyone who went into debt to buy a car.
+    
+### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
+  
 We fight because it is wrong that 40 percent of people in debt use credit cards to cover basic living costs including rent, food, and utilities. It is wrong that 62 percent of personal bankruptcies in the U.S. are linked to medical debt. It is wrong that students are leaving college owing an average of $35,000, and millions are in default. It is wrong that payday lenders earn high profits from poverty. And it is wrong that local court systems target poor people, disproportionately black and brown, and load them up with debt.
 
 We are different in many ways. Some of us are old, and some are young; we are from different parts of the country; we are diverse in race, ethnicity and religious background. A common belief unites us: everyone should have access to the goods and services they need to live without going broke or going into debt.
 
 Debt has isolated us and made us feel alone and ashamed. We have come out of the shadows to fight back as individuals and as a collective. We are here because we are organizing to win debt relief and a better economic system for all.`,
+    },
+    category: {
+      name: 'Auto Loans Collective',
+      text_color: '',
+      color: '',
+    },
   },
   courtFinesCollective: {
-    group: 'court-fines-fees',
-    collective: 'Court Fines and Fees Collective',
-    tag: 'For anyone who is in debt to a local court system or probation company.',
-    description: `### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
+    category: {
+      name: 'Court Fines and Fees Collective',
+      text_color: '',
+      color: '',
+    },
+    group: {
+      name: 'court-fines-fees',
+      full_name: 'Court Fines and Fees Collective',
+      ...collectiveGroup,
+    },
+    topic: {
+      title: 'About the Court Fines and Fees Collective',
+    },
+    post: {
+      raw: `For anyone who is in debt to a local court system or probation company.
+    
+### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
 
 We fight because it is wrong that 40 percent of people in debt use credit cards to cover basic living costs including rent, food, and utilities. It is wrong that 62 percent of personal bankruptcies in the U.S. are linked to medical debt. It is wrong that students are leaving college owing an average of $35,000, and millions are in default. It is wrong that payday lenders earn high profits from poverty. And it is wrong that local court systems target poor people, disproportionately black and brown, and load them up with debt.
 
 We are different in many ways. Some of us are old, and some are young; we are from different parts of the country; we are diverse in race, ethnicity and religious background. A common belief unites us: everyone should have access to the goods and services they need to live without going broke or going into debt.
 
 Debt has isolated us and made us feel alone and ashamed. We have come out of the shadows to fight back as individuals and as a collective. We are here because we are organizing to win debt relief and a better economic system for all.`,
+    },
   },
   medicalDebtCollective: {
-    group: 'medical-debt',
-    collective: 'Medical Debt Collective',
-    tag: 'For anyone who went into debt for health care.',
-    description: `### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
+    group: {
+      name: 'medical-debt',
+      full_name: 'Medical Debt Collective',
+      ...collectiveGroup,
+    },
+    topic: {
+      title: 'About the Medical Debt Collective',
+    },
+    post: {
+      raw: `For anyone who went into debt for health care.
+
+### We are working together to plan actions, to develop debt resistance campaigns and to launch coordinated strikes.
 
 We fight because it is wrong that 40 percent of people in debt use credit cards to cover basic living costs including rent, food, and utilities. It is wrong that 62 percent of personal bankruptcies in the U.S. are linked to medical debt. It is wrong that students are leaving college owing an average of $35,000, and millions are in default. It is wrong that payday lenders earn high profits from poverty. And it is wrong that local court systems target poor people, disproportionately black and brown, and load them up with debt.
 
 We are different in many ways. Some of us are old, and some are young; we are from different parts of the country; we are diverse in race, ethnicity and religious background. A common belief unites us: everyone should have access to the goods and services they need to live without going broke or going into debt.
 
 Debt has isolated us and made us feel alone and ashamed. We have come out of the shadows to fight back as individuals and as a collective. We are here because we are organizing to win debt relief and a better economic system for all.`,
+    },
+    category: {
+      name: 'Medical Debt Collective',
+      text_color: '',
+      color: '',
+    },
   },
   solidarityBloc: {
-    group: 'solidarity-bloc',
-    collective: 'Solidarity Bloc',
-    tag: 'For anyone organizing in solidarity with people in debt.',
-    description: `We organize in solidarity with those who are struggling under the weight of indebtedness for simply trying to access basic needs like healthcare, education and housing.
+    group: {
+      name: 'solidarity-bloc',
+      full_name: 'Solidarity Bloc',
+      ...collectiveGroup,
+    },
+    topic: {
+      title: 'About the Solidarity Bloc',
+    },
+    post: {
+      raw: `For anyone organizing in solidarity with people in debt.
+
+We organize in solidarity with those who are struggling under the weight of indebtedness for simply trying to access basic needs like healthcare, education and housing.
 
 We are committed to direct action, mutual aid and campaign support.`,
+    },
+    category: {
+      text_color: '',
+      color: '',
+      name: 'Solidarity Bloc',
+    },
   },
 };
 
 const customFieldPerCollective = Object.keys(collectives).map(key => {
   return {
-    name: collectives[key].collective,
-    description: collectives[key].collective,
+    name: collectives[key].category.name,
+    description: collectives[key].category.name,
     field_type: 'confirm',
     editable: true,
   };
+});
+
+Object.keys(collectives).forEach(key => {
+  const { category, group } = collectives[key];
+  category[`permissions[${group.name}]`] = 1;
 });
 
 module.exports = { collectives, tagGroups, groups };
