@@ -1,28 +1,11 @@
-const Promise = require('bluebird');
-const { collectives, groups, tagGroups } = require('./seed');
+const { collectives, groups, tagGroups, customUserFields } = require('./seed');
 const colArr = Object.keys(collectives).map(k => collectives[k]);
-const {
-  noNulls,
-  getCollectiveAboutTopic,
-  getCollectiveTopicPost,
-  getExistingCollectives,
-  getExistingGroups,
-  getExistingTagGroups,
-  getPost,
-  getTopicFirstPost,
-  createCollective,
-  createGroup,
-  createTagGroup,
-  updateCollective,
-  updatePost,
-  updateTagGroup,
-  updateTopic,
-} = require('./api');
+const { collective, campaign, topic } = require('./api');
 
 async function main() {
-  const existingCollectives = await getExistingCollectives();
-  const existingGroups = await getExistingGroups();
-  const existingTagGroups = await getExistingTagGroups();
+  const existingCollectives = await collective.getExistingCollectives();
+  const existingGroups = await collective.getExistingGroups();
+  const existingTagGroups = await campaign.getExistingTagGroups();
 
   const collectivesToCreate = colArr.filter(({ collective }) => !existingCollectives.find(c => c.name === collective));
   const groupsToCreate = [...colArr.map(({ group }) => group), ...groups].filter(
@@ -41,33 +24,33 @@ async function main() {
     }, []);
 
   for (const { collective } of collectivesToCreate) {
-    existingCollectives.push(await createCollective(collective));
+    existingCollectives.push(await collective.createCollective(collective));
   }
 
   for (const group of groupsToCreate) {
-    existingGroups.push(await createGroup(group));
+    existingGroups.push(await collective.createGroup(group));
   }
 
   for (const tg of tagGroupsToCreate) {
-    existingTagGroups.push(await createTagGroup(tg));
+    existingTagGroups.push(await campaign.createTagGroup(tg));
   }
 
   for (const tg of tagGroupsToUpdate) {
-    const updated = await updateTagGroup(tg);
+    const updated = await campaign.updateTagGroup(tg);
     Object.assign(existingTagGroups.find(({ name }) => tg.name === name), tg);
   }
 
   for (const c of existingCollectives) {
     const { tag, description, collective: name } = colArr.find(({ collective }) => collective === c.name);
     const full = `${tag}  \n\n${description}`;
-    const aboutTopic = await getCollectiveAboutTopic(c);
+    const aboutTopic = await collective.getCollectiveAboutTopic(c);
     const idealTitle = `About the ${name}`;
     if (aboutTopic.title !== idealTitle) {
-      await updateTopic(aboutTopic, idealTitle);
+      await campaign.updateTopic(aboutTopic, idealTitle);
     }
-    const topicPost = await getTopicFirstPost(aboutTopic);
+    const topicPost = await topic.getTopicFirstPost(aboutTopic);
     if (topicPost.raw !== full) {
-      await updatePost(topicPost.id, full);
+      await topic.updatePost(topicPost.id, full);
     }
   }
 
