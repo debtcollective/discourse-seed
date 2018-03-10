@@ -35,9 +35,9 @@ module.exports = async () => {
   for (const existing of existingCollectives.filter(e => colArr.find(({ category }) => category.name === e.name))) {
     const seed = colArr.find(c => c.category.name === existing.name);
 
-    if (propsDiffer(seed, existing) || !discourse.categories.permissionsMatch(seed, existing)) {
+    if (propsDiffer(seed.category, existing) || !discourse.categories.permissionsMatch(seed.category, existing)) {
       await sleepAsync();
-      await discourse.categories.update(Object.assign(discourse.categories.stripPermissions(existing), seed));
+      await discourse.categories.update(Object.assign(discourse.categories.stripPermissions(existing), seed.category));
     }
 
     const aboutTopic = await discourse.categories.getAboutTopic(existing);
