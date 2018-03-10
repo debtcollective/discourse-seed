@@ -1,9 +1,9 @@
-const { enums: { levels } } = require('./discourse');
+const { enums: { visibility, trust } } = require('./discourse');
 
 const collectiveGroup = {
-  mentionable_level: levels.membersModsAndAdmins,
-  messageable_level: levels.membersModsAndAdmins,
-  visbility_level: levels.membersModsAndAdmins,
+  mentionable_level: visibility.membersModsAndAdmins,
+  messageable_level: visibility.membersModsAndAdmins,
+  visbility_level: visibility.membersModsAndAdmins,
   primary_group: true,
   public_admission: false,
   allow_membership_requests: false,
@@ -22,9 +22,10 @@ const groups = [
   {
     name: 'dispute-admin',
     full_name: 'Dispute Administrator',
-    mentionable_level: levels.everyone,
-    messageable_level: levels.everyone,
-    visbility_level: levels.everyone,
+    mentionable_level: visibility.everyone,
+    messageable_level: visibility.everyone,
+    visbility_level: visibility.everyone,
+    grant_trust_level: trust.platformAdmin,
     primary_group: true,
     public_admission: false,
     allow_membership_requests: false,
