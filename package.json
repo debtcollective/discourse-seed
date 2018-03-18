@@ -1,7 +1,7 @@
 {
-  "name": "tdc-discourse-seed",
+  "name": "tds-discourse-seed",
   "version": "1.0.0",
-  "description": "Seed Debt Collective Discourse instance using REST API",
+  "description": "Seed Debt Syndicate Discourse instance using REST API",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
