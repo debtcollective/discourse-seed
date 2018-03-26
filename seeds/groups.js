@@ -1,6 +1,10 @@
 const { groups } = require('../seed');
 const { splitByProp, sleepAsync } = require('./utils');
 
+/**
+ * Seeds the groups
+ * @param {discourseApi.DiscourseApi} discourse Discourse API instance
+ */
 module.exports = async discourse => {
   const existing = await discourse.groups.get();
 

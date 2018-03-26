@@ -1,5 +1,8 @@
 const { api_key = '', api_username = 'system', api_url = 'http://localhost:3000' } = require('./secrets');
 
+/**
+ * @type {discourseApi.DiscourseApi}
+ */
 const discourse = require('discourse-node-api')({ api_key, api_username, api_url });
 
 async function main() {

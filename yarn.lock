@@ -16,16 +16,6 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@types/node@*":
-  version "9.6.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.0.tgz#d3480ee666df9784b1001a1872a2f6ccefb6c2d7"
-
-"@types/superagent@^3.5.7":
-  version "3.5.7"
-  resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-3.5.7.tgz#c170633e7dff01425b4712bb3afac3a12be49b7b"
-  dependencies:
-    "@types/node" "*"
-
 abab@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -452,11 +442,9 @@ diff@^3.2.0:
 
 "discourse-node-api@git://github.com/debtsyndicate/discourse-node-api.git#master":
   version "0.0.1"
-  resolved "git://github.com/debtsyndicate/discourse-node-api.git#b60565fff52975568cee1a957ce6dbdfa5c99a16"
+  resolved "git://github.com/debtsyndicate/discourse-node-api.git#a602a124d4836f2e1c9d2f5176c72acb9004a0b2"
   dependencies:
-    "@types/superagent" "^3.5.7"
     superagent "^3.8.2"
-    typescript "^2.7.2"
 
 domexception@^1.0.0:
   version "1.0.1"
@@ -2124,10 +2112,6 @@ type-check@~0.3.2:
   resolved "https://registry.yarnpkg.com/type-check/-/type-check-0.3.2.tgz#5884cab512cf1d355e3fb784f30804b2b520db72"
   dependencies:
     prelude-ls "~1.1.2"
-
-typescript@^2.7.2:
-  version "2.7.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.2.tgz#2d615a1ef4aee4f574425cdff7026edf81919836"
 
 union-value@^1.0.0:
   version "1.0.0"

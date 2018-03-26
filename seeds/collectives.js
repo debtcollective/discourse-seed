@@ -4,6 +4,10 @@ const { propsDiffer, splitByProp, sleepAsync } = require('./utils');
 const colArr = Object.keys(collectives).map(k => collectives[k]);
 const collectiveGroups = colArr.map(c => c.group);
 
+/**
+ * Seeds the collectives
+ * @param {discourseApi.DiscourseApi} discourse Discourse API instance
+ */
 module.exports = async discourse => {
   await sleepAsync();
   const existingCollectives = await discourse.categories.getAll();
