@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.1",
+    "discourse-node-api": "git://github.com/debtsyndicate/discourse-node-api.git#master",
     "superagent": "^3.8.2"
   },
   "devDependencies": {
@@ -19,6 +20,9 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.js": ["prettier --write", "git add"]
+    "*.js": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

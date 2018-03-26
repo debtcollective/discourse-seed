@@ -1,8 +1,7 @@
-const discourse = require('../discourse');
 const { groups } = require('../seed');
 const { splitByProp, sleepAsync } = require('./utils');
 
-module.exports = async () => {
+module.exports = async discourse => {
   const existing = await discourse.groups.get();
 
   const { toCreate, toUpdate } = splitByProp('name', groups, existing);

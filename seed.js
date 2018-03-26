@@ -1,4 +1,4 @@
-const { enums: { visibility, trust } } = require('./discourse');
+const { enums: { visibility, trust } } = require('discourse-node-api');
 
 const collectiveGroup = {
   mentionable_level: visibility.membersModsAndAdmins,

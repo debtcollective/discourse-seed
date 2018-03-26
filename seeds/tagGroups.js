@@ -1,8 +1,7 @@
-const discourse = require('../discourse');
 const { tagGroups } = require('../seed');
 const { splitByProp, sleepAsync } = require('./utils');
 
-module.exports = async () => {
+module.exports = async discourse => {
   await sleepAsync();
   const existing = await discourse.tagGroups.getAll();
 

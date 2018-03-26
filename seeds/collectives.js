@@ -1,11 +1,10 @@
-const discourse = require('../discourse');
 const { collectives } = require('../seed');
 const { propsDiffer, splitByProp, sleepAsync } = require('./utils');
 
 const colArr = Object.keys(collectives).map(k => collectives[k]);
 const collectiveGroups = colArr.map(c => c.group);
 
-module.exports = async () => {
+module.exports = async discourse => {
   await sleepAsync();
   const existingCollectives = await discourse.categories.getAll();
   await sleepAsync();
