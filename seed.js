@@ -11,11 +11,18 @@ const collectiveGroup = {
 };
 
 const collectiveDefaults = {
-  'permissions[admins]': '1',
-  'permissions[trust_level_3]': '1',
-  'permissions[trust_level_4]': '1',
   color: 'FF4630',
   text_color: '2B2B2B',
+  permissions: {
+    admins: 1,
+    trust_level_3: 1,
+    trust_level_4: 1,
+  },
+  custom_fields: {
+    location_enabled: true,
+    location_topic_status: true,
+    location_map_filter_closed: true,
+  },
 };
 
 const tagGroups = [
@@ -294,7 +301,7 @@ const customFieldPerCollective = Object.keys(collectives).map(key => {
 
 Object.keys(collectives).forEach(key => {
   const { category, group } = collectives[key];
-  category[`permissions[${group.name}]`] = '1';
+  category[`permissions[${group.name}]`] = 1;
 });
 
 module.exports = { collectives, tagGroups, groups };
