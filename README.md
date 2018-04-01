@@ -2,10 +2,7 @@ Module for seeding the Debt Syndicate's Discourse instances with Collectives, Us
 
 ## Guidance for contributors
 
-There is currently a clear separation between the discourse API code and the code that actually does the seeding.
-Each logical grouping of seeds should go in their own file in the `seeds` folder and export a single `async` function. This function should get called in `index.js` in the `main` function, like the existing seed modules are currently being called.
-
-Require in the discourse API from the discourse folder. Do not use super agent to call the API directly. The API utilities automatically handle authentication and the various quirks of Discourse's REST API like making sure the models passed in do not result in a 400 request because you passed a JSON object to a POST's field or dealing with the odd request where you have to pass the properties as properties of some other entity (like `posts` or the permissions on a category). If you are adding to the Discourse API, note that you should continue to maintain that guarantee. If you find that making a request in a certain way will break the API, _prevent that from being done in the API method_. We've attempted to maintain a separation between Discourse's data model and our own. To maintain this, try not to reference Debt Syndicate specific stuff in the Discourse API. Eventually we can move the Discourse API to a publishable NPM module, but for now it's not comprehensive enough and would need a lot more documentation and testing before being released generally.
+If you need to make a new endpoint accessible in the discourse-node-api you may mask the request by using the `auth<METHOD>` functions exposed by the DiscourseApi instance until your PR in the [discourse-node-api](https://github.com/debtcollective/discourse-node-api) is merged and available for use.
 
 Always sleep before making an API call. Three quarters of a second is the default length of time and it seems strike the right balance between speed and infrequency to prevent Discourse's API from rate limiting you. This isn't built into the API because well, maybe you want to get rate limited, who knows. Just know that it's preventable by sleeping before making the call.
 
