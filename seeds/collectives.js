@@ -39,31 +39,34 @@ module.exports = async discourse => {
     await sleepAsync();
     const fullExisting = await discourse.categories.get(existing.id);
 
-    Object.assign(
-      existing,
-      fullExisting.group_permissions.reduce(
+    const mergedExisting = {
+      ...existing,
+      ...fullExisting.group_permissions.reduce(
         (permissions, { permission_type, group_name }) => ({
           ...permissions,
           [`permissions[${group_name}]`]: permission_type,
         }),
         {},
       ),
+      ...discourse.utils.mapObjKeys(k => `custom_fields[${k}]`)(fullExisting.custom_fields),
+    };
+
+    const seed = colArr.find(c => c.category.name === mergedExisting.name);
+
+    const flatSeed = discourse.utils.flattenObj(seed.category);
+
+    const customFieldsToMap = ['location_enabled', 'location_topic_status', 'location_map_filter_closed'].map(
+      cf => `custom_fields[${cf}]`,
     );
 
-    const seed = colArr.find(c => c.category.name === existing.name);
-
-    const flatCategory = discourse.utils.flattenObj(seed.category);
-
-    const customFieldsToMap = ['location_enabled', 'location_topic_status', 'location_map_filter_closed'];
-    const flatExisting = discourse.utils.mapObjKeys(k => (customFieldsToMap.includes(k) ? `custom_fields[${k}]` : k))(
-      existing,
-    );
-
-    if (propsDiffer(flatCategory, flatExisting) || !discourse.categories.permissionsMatch(flatCategory, flatExisting)) {
+    if (
+      propsDiffer(flatSeed, mergedExisting) ||
+      !discourse.categories.permissionsMatch(flatSeed, mergedExisting) ||
+      // Custom fields are not included in the returned category unless they've already been set at least once
+      customFieldsToMap.reduce(cf => mergedExisting[cf] === undefined, false)
+    ) {
       await sleepAsync();
-      await discourse.categories.update(
-        Object.assign(discourse.categories.stripPermissions(flatExisting), flatCategory),
-      );
+      await discourse.categories.update(Object.assign(discourse.categories.stripPermissions(mergedExisting), flatSeed));
     }
 
     const aboutTopic = await discourse.categories.getAboutTopic(existing);
