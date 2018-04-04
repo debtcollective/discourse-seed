@@ -442,7 +442,7 @@ diff@^3.2.0:
 
 "discourse-node-api@git://github.com/debtsyndicate/discourse-node-api.git#master":
   version "0.0.1"
-  resolved "git://github.com/debtsyndicate/discourse-node-api.git#a602a124d4836f2e1c9d2f5176c72acb9004a0b2"
+  resolved "git://github.com/debtsyndicate/discourse-node-api.git#7c826062fa2cc4e8b596430d71f68f3182d39e81"
   dependencies:
     superagent "^3.8.2"
 

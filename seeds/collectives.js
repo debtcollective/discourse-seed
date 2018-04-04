@@ -36,11 +36,34 @@ module.exports = async discourse => {
   }
 
   for (const existing of existingCollectives.filter(e => colArr.find(({ category }) => category.name === e.name))) {
+    await sleepAsync();
+    const fullExisting = await discourse.categories.get(existing.id);
+
+    Object.assign(
+      existing,
+      fullExisting.group_permissions.reduce(
+        (permissions, { permission_type, group_name }) => ({
+          ...permissions,
+          [`permissions[${group_name}]`]: permission_type,
+        }),
+        {},
+      ),
+    );
+
     const seed = colArr.find(c => c.category.name === existing.name);
 
-    if (propsDiffer(seed.category, existing) || !discourse.categories.permissionsMatch(seed.category, existing)) {
+    const flatCategory = discourse.utils.flattenObj(seed.category);
+
+    const customFieldsToMap = ['location_enabled', 'location_topic_status', 'location_map_filter_closed'];
+    const flatExisting = discourse.utils.mapObjKeys(k => (customFieldsToMap.includes(k) ? `custom_fields[${k}]` : k))(
+      existing,
+    );
+
+    if (propsDiffer(flatCategory, flatExisting) || !discourse.categories.permissionsMatch(flatCategory, flatExisting)) {
       await sleepAsync();
-      await discourse.categories.update(Object.assign(discourse.categories.stripPermissions(existing), seed.category));
+      await discourse.categories.update(
+        Object.assign(discourse.categories.stripPermissions(flatExisting), flatCategory),
+      );
     }
 
     const aboutTopic = await discourse.categories.getAboutTopic(existing);
