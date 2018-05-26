@@ -6,12 +6,11 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.1",
-    "discourse-node-api": "git://github.com/debtsyndicate/discourse-node-api.git#master",
-    "superagent": "^3.8.2"
+    "discourse-node-api": "git://github.com/debtsyndicate/discourse-node-api.git#master"
   },
   "devDependencies": {
     "husky": "^0.14.3",
-    "lint-staged": "^7.0.0",
+    "lint-staged": "^7.1.2",
     "prettier": "^1.11.1"
   },
   "scripts": {

@@ -1,5 +1,10 @@
 const { enums: { visibility, trust } } = require('discourse-node-api');
 
+// Discourse permissions constants
+CREATE_REPLY_SEE = 1;
+REPLY_SEE = 2;
+SEE = 3;
+
 const collectiveGroup = {
   mentionable_level: visibility.membersModsAndAdmins,
   messageable_level: visibility.membersModsAndAdmins,
@@ -10,18 +15,17 @@ const collectiveGroup = {
   default_notification_level: 3,
 };
 
-const collectiveDefaults = {
+const categoryDefaults = {
   color: 'FF4630',
   text_color: '2B2B2B',
+};
+const collectiveDefaults = {
+  ...categoryDefaults,
+  correspondingGroupPermission: CREATE_REPLY_SEE,
   permissions: {
-    admins: 1,
-    trust_level_3: 1,
-    trust_level_4: 1,
-  },
-  custom_fields: {
-    location_enabled: true,
-    location_topic_status: true,
-    location_map_filter_closed: true,
+    admins: CREATE_REPLY_SEE,
+    trust_level_3: CREATE_REPLY_SEE,
+    trust_level_4: CREATE_REPLY_SEE,
   },
 };
 
@@ -47,6 +51,43 @@ const groups = [
     default_notification_level: 3,
   },
 ];
+
+const eventsActionsCustomFields = {
+  location_enabled: true,
+  location_topic_status: true,
+  location_map_filter_closed: true,
+  // TODO add events plugin custom fields
+};
+
+// Each collective will have each of the following subcategories (events, actions)
+const subCategories = {
+  events: {
+    correspondingGroupPermission: CREATE_REPLY_SEE,
+    topic: { title: 'About COLLECTIVE Events' },
+    post: { raw: 'Events created for and by members of the COLLECTIVE' },
+    category: {
+      ...categoryDefaults,
+      name: 'COLLECTIVE Events',
+      permissions: {
+        admins: CREATE_REPLY_SEE,
+      },
+      custom_fields: eventsActionsCustomFields,
+    },
+  },
+  actions: {
+    topic: { title: 'About COLLECTIVE Actions' },
+    post: { raw: 'Some ways for everyone to take action!' },
+    category: {
+      ...categoryDefaults,
+      name: 'COLLECTIVE Actions',
+      permissions: {
+        admins: CREATE_REPLY_SEE,
+        everyone: REPLY_SEE, // TODO check group name
+      },
+      custom_fields: eventsActionsCustomFields,
+    },
+  },
+};
 
 const collectives = {
   forProfitCollective: {
@@ -299,9 +340,4 @@ const customFieldPerCollective = Object.keys(collectives).map(key => {
   };
 });
 
-Object.keys(collectives).forEach(key => {
-  const { category, group } = collectives[key];
-  category[`permissions[${group.name}]`] = 1;
-});
-
-module.exports = { collectives, tagGroups, groups };
+module.exports = { collectives, tagGroups, groups, subCategories };

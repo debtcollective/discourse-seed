@@ -1,3 +1,4 @@
+// non-recursive
 const propsDiffer = (exports.propsDiffer = (seed, existing) =>
   Object.keys(seed).reduce(
     (differ, k) => (differ ? differ : typeof existing[k] !== 'undefined' && existing[k] !== seed[k]),

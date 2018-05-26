@@ -1,5 +1,5 @@
-const { collectives } = require('../seed');
-const { propsDiffer, splitByProp, sleepAsync } = require('./utils');
+const { collectives, subCategories } = require('../seed');
+const { splitByProp, sleepAsync } = require('./utils');
 
 const colArr = Object.keys(collectives).map(k => collectives[k]);
 const collectiveGroups = colArr.map(c => c.group);
@@ -10,13 +10,11 @@ const collectiveGroups = colArr.map(c => c.group);
  */
 module.exports = async discourse => {
   await sleepAsync();
-  const existingCollectives = await discourse.categories.getAll();
+  let existingCategories;
+  existingCategories = await discourse.categories.getTopLevel();
+
   await sleepAsync();
   const existingGroups = await discourse.groups.get();
-
-  const collectivesToCreate = colArr
-    .filter(({ category: c }) => !existingCollectives.find(e => e.name === c.name))
-    .map(({ category }) => category);
 
   const { toCreate: groupsToCreate, toUpdate: groupsToUpdate } = splitByProp('name', collectiveGroups, existingGroups);
 
@@ -30,55 +28,84 @@ module.exports = async discourse => {
     await discourse.groups.update(group);
   }
 
-  for (const collective of collectivesToCreate) {
+  for (const seedCollective of colArr) {
     await sleepAsync();
-    existingCollectives.push(await discourse.categories.create(collective));
+    await createOrUpdateCategory(seedCollective, existingCategories, seedCollective.group.name, discourse);
   }
 
-  for (const existing of existingCollectives.filter(e => colArr.find(({ category }) => category.name === e.name))) {
-    await sleepAsync();
-    const fullExisting = await discourse.categories.get(existing.id);
+  for (const seedCollective of colArr) {
+    const existingCategory = existingCategories.find(cat => cat.name === seedCollective.category.name);
 
-    const mergedExisting = {
-      ...existing,
-      ...fullExisting.group_permissions.reduce(
-        (permissions, { permission_type, group_name }) => ({
-          ...permissions,
-          [`permissions[${group_name}]`]: permission_type,
-        }),
-        {},
-      ),
-      ...discourse.utils.mapObjKeys(k => `custom_fields[${k}]`)(fullExisting.custom_fields),
-    };
-
-    const seed = colArr.find(c => c.category.name === mergedExisting.name);
-
-    const flatSeed = discourse.utils.flattenObj(seed.category);
-
-    const customFieldsToMap = ['location_enabled', 'location_topic_status', 'location_map_filter_closed'].map(
-      cf => `custom_fields[${cf}]`,
-    );
-
-    if (
-      propsDiffer(flatSeed, mergedExisting) ||
-      !discourse.categories.permissionsMatch(flatSeed, mergedExisting) ||
-      // Custom fields are not included in the returned category unless they've already been set at least once
-      customFieldsToMap.reduce(cf => mergedExisting[cf] === undefined, false)
-    ) {
-      await sleepAsync();
-      await discourse.categories.update(Object.assign(discourse.categories.stripPermissions(mergedExisting), flatSeed));
+    const existingSubCategories = [];
+    // find out which subcategories already exist
+    if (existingCategory.has_children) {
+      for (const subCategoryId of existingCategory.subcategory_ids) {
+        await sleepAsync();
+        existingSubCategories.push(await discourse.categories.get(subCategoryId));
+      }
     }
 
-    const aboutTopic = await discourse.categories.getAboutTopic(existing);
-    if (aboutTopic.title !== seed.topic.title) {
-      await sleepAsync();
-      await discourse.topics.update(Object.assign(aboutTopic, seed.topic));
-    }
-
-    const topicPost = await discourse.posts.get(discourse.topics.getPostId(aboutTopic));
-    if (topicPost.raw !== seed.post.raw) {
-      await sleepAsync();
-      await discourse.posts.update(Object.assign(topicPost, seed.post));
+    for (const subCategoryId of Object.keys(subCategories)) {
+      const seedSubCategory = actualizeSubCategory(subCategories[subCategoryId], existingCategory);
+      await createOrUpdateCategory(seedSubCategory, existingSubCategories, seedCollective.group.name, discourse);
     }
   }
+};
+
+const createOrUpdateCategory = async function(seed, existingCategories, groupName, discourse) {
+  // if no category with that name exists, create it; otherwise, update it
+
+  // give the corresponding group permissions, if necessary
+  if (seed.correspondingGroupPermission !== undefined) {
+    seed.category.permissions[groupName] = seed.correspondingGroupPermission;
+  }
+  delete seed.category.addCorrespondingGroupPermission;
+
+  // names of categories at the top level or with the same parent are unique
+  let existingCategory;
+  existingCategory = existingCategories.find(existingCategory => existingCategory.name === seed.category.name);
+  if (existingCategory === undefined) {
+    // there is no matching existing category
+    await sleepAsync();
+    existingCategory = await discourse.categories.create(seed.category);
+    existingCategories.push(existingCategory);
+  } else {
+    // this should be in seed? TODO
+    const seedCustomFields = ['location_enabled', 'location_topic_status', 'location_map_filter_closed'];
+
+    // ideally we would check to see if any of the properties need to be changed first, but the
+    // discourse api has too many bugs to do it well
+    // does this erase properties though?? TODO
+    await sleepAsync();
+    await discourse.categories.update(Object.assign(existingCategory, seed.category));
+  }
+
+  sleepAsync();
+  const aboutTopic = await discourse.categories.getAboutTopic(existingCategory);
+  if (aboutTopic.title !== seed.topic.title) {
+    await sleepAsync();
+    await discourse.topics.update(Object.assign(aboutTopic, seed.topic));
+  }
+
+  sleepAsync(2);
+  const topicPost = await discourse.posts.get(discourse.topics.getPostId(aboutTopic));
+  if (topicPost.raw !== seed.post.raw) {
+    await sleepAsync();
+    await discourse.posts.update(Object.assign(topicPost, seed.post));
+  }
+
+  return existingCategory.id;
+};
+
+const actualizeSubCategory = function(subCategory, superCategory) {
+  // some of the values in the subcategories depend on the supercategory
+  const replaceCollective = string => string.replace('COLLECTIVE', superCategory.name);
+
+  const seedSubCategory = JSON.parse(JSON.stringify(subCategory)); // deepcopy
+
+  seedSubCategory.category.parent_category_id = superCategory.id;
+  seedSubCategory.topic.title = replaceCollective(seedSubCategory.topic.title);
+  seedSubCategory.post.raw = replaceCollective(seedSubCategory.post.raw);
+  seedSubCategory.category.name = replaceCollective(seedSubCategory.category.name);
+  return seedSubCategory;
 };
