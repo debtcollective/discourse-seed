@@ -56,7 +56,10 @@ const eventsActionsCustomFields = {
   location_enabled: true,
   location_topic_status: true,
   location_map_filter_closed: true,
-  // TODO add events plugin custom fields
+  events_enabled: true,
+  events_agenda_enabled: true,
+  events_calendar_enabled: true,
+  events_min_trust_to_create: 1,
 };
 
 // Each collective will have each of the following subcategories (events, actions)
@@ -82,7 +85,7 @@ const subCategories = {
       name: 'COLLECTIVE Actions',
       permissions: {
         admins: CREATE_REPLY_SEE,
-        everyone: REPLY_SEE, // TODO check group name
+        everyone: REPLY_SEE,
       },
       custom_fields: eventsActionsCustomFields,
     },

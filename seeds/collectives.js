@@ -10,8 +10,7 @@ const collectiveGroups = colArr.map(c => c.group);
  */
 module.exports = async discourse => {
   await sleepAsync();
-  let existingCategories;
-  existingCategories = await discourse.categories.getTopLevel();
+  const existingCategories = await discourse.categories.getTopLevel();
 
   await sleepAsync();
   const existingGroups = await discourse.groups.get();
@@ -29,12 +28,12 @@ module.exports = async discourse => {
   }
 
   for (const seedCollective of colArr) {
-    await sleepAsync();
-    await createOrUpdateCategory(seedCollective, existingCategories, seedCollective.group.name, discourse);
-  }
-
-  for (const seedCollective of colArr) {
-    const existingCategory = existingCategories.find(cat => cat.name === seedCollective.category.name);
+    existingCategory = await createOrUpdateCategory(
+      seedCollective,
+      existingCategories,
+      seedCollective.group.name,
+      discourse,
+    );
 
     const existingSubCategories = [];
     // find out which subcategories already exist
@@ -68,14 +67,9 @@ const createOrUpdateCategory = async function(seed, existingCategories, groupNam
     // there is no matching existing category
     await sleepAsync();
     existingCategory = await discourse.categories.create(seed.category);
-    existingCategories.push(existingCategory);
   } else {
-    // this should be in seed? TODO
-    const seedCustomFields = ['location_enabled', 'location_topic_status', 'location_map_filter_closed'];
-
     // ideally we would check to see if any of the properties need to be changed first, but the
     // discourse api has too many bugs to do it well
-    // does this erase properties though?? TODO
     await sleepAsync();
     await discourse.categories.update(Object.assign(existingCategory, seed.category));
   }
@@ -94,7 +88,7 @@ const createOrUpdateCategory = async function(seed, existingCategories, groupNam
     await discourse.posts.update(Object.assign(topicPost, seed.post));
   }
 
-  return existingCategory.id;
+  return existingCategory;
 };
 
 const actualizeSubCategory = function(subCategory, superCategory) {
