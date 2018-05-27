@@ -27,15 +27,3 @@ exports.splitByProp = (prop, seed, existing, differ = propsDiffer, merge = true)
     },
     { toCreate: [], toUpdate: [] },
   );
-
-const sleep = (exports.sleep = (seconds = 0.75) => {
-  const ms = seconds * 1000;
-  const start = Date.now();
-  while (Date.now() - start < ms) {}
-});
-
-exports.sleepAsync = seconds =>
-  new Promise(res => {
-    sleep(seconds);
-    res();
-  });

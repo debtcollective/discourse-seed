@@ -6,6 +6,8 @@ const { api_key = '', api_username = 'system', api_url = 'http://localhost:3000'
 const discourse = require('discourse-node-api')({ api_key, api_username, api_url });
 
 async function main() {
+  await discourse.admin.settings.enableTags(true);
+
   await require('./seeds/collectives')(discourse);
   await require('./seeds/tagGroups')(discourse);
   await require('./seeds/groups')(discourse);

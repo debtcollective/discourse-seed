@@ -1,5 +1,5 @@
 const { groups } = require('../seed');
-const { splitByProp, sleepAsync } = require('./utils');
+const { splitByProp } = require('./utils');
 
 /**
  * Seeds the groups
@@ -11,12 +11,10 @@ module.exports = async discourse => {
   const { toCreate, toUpdate } = splitByProp('name', groups, existing);
 
   for (const group of toCreate) {
-    await sleepAsync();
     existing.push(await discourse.groups.create(group));
   }
 
   for (const group of toUpdate) {
-    await sleepAsync();
     await discourse.groups.update(group);
   }
 };
