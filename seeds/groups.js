@@ -15,6 +15,7 @@ module.exports = async discourse => {
   }
 
   for (const group of toUpdate) {
-    await discourse.groups.update(group);
+    // https://github.com/debtcollective/parent/issues/142
+    //    await discourse.groups.update(group);
   }
 };

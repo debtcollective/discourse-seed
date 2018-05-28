@@ -20,7 +20,8 @@ module.exports = async discourse => {
   }
 
   for (const group of groupsToUpdate) {
-    await discourse.groups.update(group);
+    // https://github.com/debtcollective/parent/issues/142
+    //    await discourse.groups.update(group);
   }
 
   for (const seedCollective of colArr) {
@@ -57,10 +58,9 @@ const createOrUpdateCategory = async function(seed, existingCategories, groupNam
 
   // names of categories at the top level or with the same parent are unique
   let existingCategory;
-  existingCategory = existingCategories.find(existingCategory => existingCategory.name === seed.category.name);
+  existingCategory = existingCategories.find(cat => cat.name === seed.category.name);
   if (existingCategory === undefined) {
     // there is no matching existing category
-
     existingCategory = await discourse.categories.create(seed.category);
   } else {
     // ideally we would check to see if any of the properties need to be changed first, but the
@@ -84,11 +84,15 @@ const createOrUpdateCategory = async function(seed, existingCategories, groupNam
 
 const actualizeSubCategory = function(subCategory, superCategory) {
   // some of the values in the subcategories depend on the supercategory
-  const replaceCollective = string => string.replace('COLLECTIVE', superCategory.name);
+  const replaceCollective = string => {
+    console.assert(string !== undefined, 'undefined string in ' + subCategory.category.name);
+    return string.replace('COLLECTIVE', superCategory.name);
+  };
 
   const seedSubCategory = JSON.parse(JSON.stringify(subCategory)); // deepcopy
 
   seedSubCategory.category.parent_category_id = superCategory.id;
+
   seedSubCategory.topic.title = replaceCollective(seedSubCategory.topic.title);
   seedSubCategory.post.raw = replaceCollective(seedSubCategory.post.raw);
   seedSubCategory.category.name = replaceCollective(seedSubCategory.category.name);
