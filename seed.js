@@ -73,8 +73,8 @@ const subCategories = {
         admins: permission.create_reply_see,
       },
       custom_fields: eventsActionsCustomFields,
+      topic_template: strings.subCategories.events.category.topic_template,
     },
-    template: strings.subCategories.events.template,
   },
   actions: {
     topic: { title: 'About COLLECTIVE Actions' },

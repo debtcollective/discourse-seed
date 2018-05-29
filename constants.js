@@ -7,14 +7,16 @@ const strings = {
         raw:
           'An event is a private gathering organized by any COLLECTIVE member for the purpose of organizing. Events include BBQs and pizza parties or other community gatherings. They can also include debt assemblies, events where people come together to talk about their debt or debt dispute parties where attendees file debt disputes and/or learn more about debt.',
       },
-    },
-    template: `Include a short title for your event
+      category: {
+        topic_template: `Include a short title for your event
 
 Include brief description
 
 If it is relevant, don’t forget to provide a location and time
 
 Who is invited?`,
+      },
+    },
   },
   collectives: {
     forProfitCollective: {
