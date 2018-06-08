@@ -1,8 +1,7 @@
 const { collectives, subCategories } = require('../data');
 const { splitByProp } = require('./utils');
 
-const colArr = Object.keys(collectives).map(k => collectives[k]);
-const collectiveGroups = colArr.map(c => c.group);
+const collectiveGroups = collectives.map(c => c.group);
 
 /**
  * Seeds the collectives
@@ -24,7 +23,7 @@ module.exports = async discourse => {
     //    await discourse.groups.update(group);
   }
 
-  for (const seedCollective of colArr) {
+  for (const seedCollective of collectives) {
     existingCategory = await createOrUpdateCategory(
       seedCollective,
       existingCategories,
