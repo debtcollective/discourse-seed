@@ -1,4 +1,4 @@
-const { collectives, subCategories } = require('../seed');
+const { collectives, subCategories } = require('../data');
 const { splitByProp } = require('./utils');
 
 const colArr = Object.keys(collectives).map(k => collectives[k]);

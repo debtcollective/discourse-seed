@@ -1,4 +1,4 @@
-const { groups } = require('../seed');
+const { groups } = require('../data');
 const { splitByProp } = require('./utils');
 
 /**
