@@ -1,10 +1,5 @@
-const { enums: { visibility, permission } } = require('discourse-node-api');
-
-const categoryDefaults = {
-  color: 'FF4630',
-  text_color: '2B2B2B',
-};
-
+const { enums: { visibility, permission, notification, trust } } = require('discourse-node-api');
+const categoryDefaults = { color: 'FF4630', text_color: '2B2B2B' };
 const subCategoryDefaults = {
   ...categoryDefaults,
   custom_fields: {
@@ -14,10 +9,9 @@ const subCategoryDefaults = {
     events_enabled: true,
     events_agenda_enabled: true,
     events_calendar_enabled: true,
-    events_min_trust_to_create: 1,
+    events_min_trust_to_create: trust.basic,
   },
 };
-
 const collectiveCategoryDefaults = {
   ...categoryDefaults,
   correspondingGroupPermission: permission.create_reply_see,
@@ -27,15 +21,19 @@ const collectiveCategoryDefaults = {
     trust_level_4: permission.create_reply_see,
   },
 };
-
-const collectiveGroupDefaults = {
-  mentionable_level: visibility.membersModsAndAdmins,
-  messageable_level: visibility.membersModsAndAdmins,
-  visibility_level: visibility.membersModsAndAdmins,
+const groupDefaults = {
+  mentionable_level: visibility.everyone,
+  messageable_level: visibility.everyone,
+  visibility_level: visibility.everyone,
   primary_group: true,
   public_admission: false,
   allow_membership_requests: false,
-  default_notification_level: 3,
+  default_notification_level: notification.watching,
 };
-
-module.exports = { collectiveGroupDefaults, collectiveCategoryDefaults, subCategoryDefaults };
+const collectiveGroupDefaults = {
+  ...groupDefaults,
+  mentionable_level: visibility.membersModsAndAdmins,
+  messageable_level: visibility.membersModsAndAdmins,
+  visibility_level: visibility.membersModsAndAdmins,
+};
+module.exports = { collectiveGroupDefaults, collectiveCategoryDefaults, subCategoryDefaults, groupDefaults };
