@@ -1,4 +1,4 @@
-Module for seeding the Debt Syndicate's Discourse instances with Collectives, User Groups, Wikis and anything else we need to bend Discourse to our purposes.
+Module for seeding the Debt Syndicate's Discourse instances with Collectives, User Groups, Wikis, Settings, and anything else we need to bend Discourse to our purposes.
 
 ## Guidance for contributors
 
