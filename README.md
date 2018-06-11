@@ -16,8 +16,6 @@ Open a PR, get it reviewed and approved by a maintainer and once it is merged th
 
 This script requires a couple secrets to work. Really only one of these is a secret but :woman_shrugging:. These all have defaults in the script but you'll need to update the API key.
 
-If you start getting an access denied error during the `tag_group` creation, make sure your Discourse instance has tagging enabled otherwise it'll block you! [Evidence of that is here.](https://github.com/discourse/discourse/blob/a94dc0c7311f744bb8d5801787b0a1a5df0f036b/lib/guardian/tag_guardian.rb#L19).
-
 Create a `secrets.js` file that looks like this:
 
 ```javascript
@@ -34,7 +32,6 @@ module.exports = {
 
 ## Steps for enabling in new Discourse environments
 
-1.  Enable tagging in Discourse (Admin Dashboard -> Settings -> Tags -> enable topic tags)
 2.  Generate an API key for the system user (Admin Dashboard -> Users -> system -> generate API key)
 3.  Create a `secrets.<env>.js` as described above
 4.  Upload the secrets file to tdc-secure S3 bucket ensuring public access is OFF. Only the CI policy will have access to this file.
