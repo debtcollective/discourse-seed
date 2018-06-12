@@ -1,5 +1,6 @@
 const { strings } = require('./constants');
 const { collectiveGroupDefaults, collectiveCategoryDefaults } = require('./defaults');
+const { enums: { permission } } = require('discourse-node-api');
 
 const _collectives = [
   {
@@ -59,8 +60,9 @@ const _collectives = [
 ];
 
 const collectives = _collectives.map(collective => {
+  collective.correspondingGroupPermission = permission.create_reply_see;
   collective.group = Object.assign({}, collectiveGroupDefaults, collective.group);
-  collective.collective = Object.assign({}, collectiveCategoryDefaults, collective.collective);
+  collective.category = Object.assign({}, collectiveCategoryDefaults, collective.category);
   return collective;
 });
 

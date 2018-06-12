@@ -51,6 +51,7 @@ const createOrUpdateCategory = async function(seed, existingCategories, groupNam
 
   // give the corresponding group permissions, if necessary
   if (seed.correspondingGroupPermission !== undefined) {
+    seed.category.permissions = JSON.parse(JSON.stringify(seed.category.permissions)); // deepcopy
     seed.category.permissions[groupName] = seed.correspondingGroupPermission;
   }
   delete seed.category.addCorrespondingGroupPermission;

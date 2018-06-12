@@ -36,4 +36,5 @@ const collectiveGroupDefaults = {
   messageable_level: visibility.membersModsAndAdmins,
   visibility_level: visibility.membersModsAndAdmins,
 };
+
 module.exports = { collectiveGroupDefaults, collectiveCategoryDefaults, subCategoryDefaults, groupDefaults };
