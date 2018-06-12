@@ -1,4 +1,4 @@
-const { tagGroups } = require('../seed');
+const { tagGroups } = require('../data');
 const { splitByProp } = require('./utils');
 
 /**

@@ -1,4 +1,4 @@
-const { api_key = '', api_username = 'system', api_url = 'http://localhost:3000' } = require('./secrets');
+const { api_key = '', api_username = 'system', api_url = 'http://localhost:3000', ssoSecret } = require('./secrets');
 
 /**
  * @type {discourseApi.DiscourseApi}
@@ -13,6 +13,8 @@ const discourse = require('discourse-node-api')({
 
 async function main() {
   await discourse.admin.settings.enableTags(true);
+  await discourse.admin.settings.enableSsoProvider(true);
+  await discourse.admin.settings.setSsoSecret(ssoSecret);
 
   await require('./seeds/collectives')(discourse);
   await require('./seeds/tagGroups')(discourse);
