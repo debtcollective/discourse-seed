@@ -14,6 +14,7 @@
     "prettier": "^1.11.1"
   },
   "scripts": {
+    "preseed": "yarn install",
     "seed": "node index.js",
     "precommit": "lint-staged"
   },
