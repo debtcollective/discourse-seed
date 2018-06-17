@@ -17,6 +17,7 @@ async function main() {
   await discourse.admin.settings.setSsoSecret(ssoSecret);
 
   await require('./seeds/collectives')(discourse);
+  await require('./seeds/campaigns')(discourse); // must be before tagGroups
   await require('./seeds/tagGroups')(discourse);
   await require('./seeds/groups')(discourse);
 

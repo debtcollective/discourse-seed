@@ -24,7 +24,7 @@ const collectiveModeratorGroups = collectives.map(({ group }) => makeCGroup(grou
 // moderator groups for each campaign
 const campaignModeratorGroups = campaigns.map(campaign => makeCGroup(campaign.name, campaign.full_name));
 
-const _groups = miscGroups.concat(collectiveModeratorGroups, campaignModeratorGroups);
+const _groups = [...miscGroups, ...collectiveModeratorGroups, ...campaignModeratorGroups];
 
 // apply defaults
 const groups = _groups.map(group => Object.assign({}, groupDefaults, group));
