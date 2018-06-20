@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.1",
-    "discourse-node-api": "git://github.com/debtsyndicate/discourse-node-api.git#master"
+    "discourse-node-api": "git://github.com/debtcollective/discourse-node-api.git#master"
   },
   "devDependencies": {
     "husky": "^0.14.3",

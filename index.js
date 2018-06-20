@@ -12,6 +12,10 @@ const discourse = require('discourse-node-api')({
 });
 
 async function main() {
+  if (api_key === '') {
+    throw 'No API key specified. See README.';
+  }
+
   await discourse.admin.settings.enableTags(true);
   await discourse.admin.settings.enableSsoProvider(true);
   await discourse.admin.settings.setSsoSecret(ssoSecret);
