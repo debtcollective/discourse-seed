@@ -13,7 +13,7 @@ const discourse = require('discourse-node-api')({
 
 async function main() {
   if (api_key === '') {
-    throw 'No API key specified. See README.';
+    throw Error('No API key specified. See README.');
   }
 
   await discourse.admin.settings.enableTags(true);
