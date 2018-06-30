@@ -19,11 +19,12 @@ const _subCategories = [
     },
   },
   {
+    correspondingGroupPermission: permission.reply_see,
     topic: { title: 'About COLLECTIVE Actions' },
     post: { raw: 'Some ways for everyone to take action!' },
     category: {
       name: 'COLLECTIVE Actions',
-      permissions: { admins: permission.create_reply_see, everyone: permission.reply_see },
+      permissions: { admins: permission.create_reply_see },
     },
   },
 ];
